@@ -17,7 +17,7 @@
         android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/til_edit"
+        app:layout_constraintRight_toLeftOf="@+id/tli_edit"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Task timer Aplication" />
 
@@ -30,12 +30,12 @@
         android:layout_marginTop="8dp"
         android:textColor="?android:attr/textColorSecondary"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/til_edit"
+        app:layout_constraintRight_toLeftOf="@+id/tli_edit"
         app:layout_constraintTop_toBottomOf="@+id/tli_name"
         tools:text="Write course notes  and video for the TaskTimer application" />
 
     <ImageButton
-        android:id="@+id/til_edit"
+        android:id="@+id/tli_edit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"

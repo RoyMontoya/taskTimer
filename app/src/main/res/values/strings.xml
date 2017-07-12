@@ -14,4 +14,9 @@
     <string name="addedit_sortorder">SortOrder</string>
     <string name="addedit_save_button_text">Save</string>
     <string name="title_activity_add_edit">AddEditActivity</string>
+    <string name="default_row_name">Instructions</string>
+    <string name="default_description_row">use the add button (+) to create tasks
+        \n\n Tasks with lower sort order will be placed first.
+        \n\n tapping a task will start the timer
+        \n\n each task has edit button to change the content</string>
 </resources>
