@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements CursorRecyclerVie
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        if (findViewById(R.id.task_detail_container) != null) twoPane = true;
+        if (findViewById(R.id.task_details_container) != null) twoPane = true;
 
 
     }
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements CursorRecyclerVie
             FragmentManager fm = getSupportFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
 
-            ft.add(R.id.task_detail_container, fragment);
+            ft.replace(R.id.task_details_container, fragment);
             ft.commit();
 
 
