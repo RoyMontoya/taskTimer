@@ -94,7 +94,11 @@ public class AppProvider extends ContentProvider {
                 throw new IllegalStateException("Unknown uri:" + uri);
         }
         SQLiteDatabase database = openHelper.getReadableDatabase();
-        return sqLiteQueryBuilder.query(database, strings, s, strings1, null, null, s1);
+//        return sqLiteQueryBuilder.query(database, strings, s, strings1, null, null, s1);
+        Cursor cursor = sqLiteQueryBuilder.query(database, strings, s, strings1, null, null, s1);
+
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+        return cursor;
     }
 
     @Nullable
@@ -151,6 +155,9 @@ public class AppProvider extends ContentProvider {
             default:
                 throw new IllegalStateException("Unknown uri:" + uri);
         }
+        if(recordId > 0){
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
         return resultUri;
     }
 
@@ -193,6 +200,9 @@ public class AppProvider extends ContentProvider {
             default:
                 throw new IllegalStateException("Unknown uri:" + uri);
         }
+        if(count > 0){
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
         return count;
     }
 
@@ -234,6 +244,9 @@ public class AppProvider extends ContentProvider {
 //                break;
             default:
                 throw new IllegalStateException("Unknown uri:" + uri);
+        }
+        if(count > 0){
+            getContext().getContentResolver().notifyChange(uri, null);
         }
         return count;
     }

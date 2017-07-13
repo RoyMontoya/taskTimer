@@ -37,7 +37,7 @@ public class AddEditActivityFragment extends Fragment {
         sortOrderTextView = view.findViewById(R.id.addedit_sortoder);
         saveButton = view.findViewById(R.id.addedit_save);
 
-        Bundle args = getActivity().getIntent().getExtras();
+        Bundle args = getArguments();
         final Task task;
         if (args != null) {
             task = (Task) args.getSerializable(Task.class.getSimpleName());
@@ -69,9 +69,9 @@ public class AddEditActivityFragment extends Fragment {
 
                 switch (mode) {
                     case EDIT:
-                        if (nameTextView.getText().toString().equals(task.getName()))
+                        if (!nameTextView.getText().toString().equals(task.getName()))
                             contentValues.put(TaskContract.Columns.TASK_NAME, nameTextView.getText().toString());
-                        if (descriptionTextView.getText().toString().equals(task.getDescription()))
+                        if (!descriptionTextView.getText().toString().equals(task.getDescription()))
                             contentValues.put(TaskContract.Columns.TASK_DESCRIPTION, descriptionTextView.getText().toString());
                         if (sortOder != 0)
                             contentValues.put(TaskContract.Columns.TASK_SORTORDER, sortOder);

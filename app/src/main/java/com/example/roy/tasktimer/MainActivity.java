@@ -2,15 +2,17 @@ package com.example.roy.tasktimer;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity {
-    public static final String TAG = "MainActivity";
+public class MainActivity extends AppCompatActivity implements CursorRecyclerViewAdapater.OnTaskClickListener {
 
+    private static final String TAG = "MainActivity";
     private boolean twoPane = false;
     private static final String ADD_EDIT_FRAGMENT = "AddEditFragment";
 
@@ -20,6 +22,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        if (findViewById(R.id.task_detail_container) != null) twoPane = true;
+
+
     }
 
     @Override
@@ -60,6 +66,18 @@ public class MainActivity extends AppCompatActivity {
     public void taskEditRequest(Task task) {
         if (twoPane) {
             Log.d(TAG, "taskEditRequest: twopane");
+            AddEditActivityFragment fragment = new AddEditActivityFragment();
+            Bundle args = new Bundle();
+            args.putSerializable(Task.class.getSimpleName(), task);
+            fragment.setArguments(args);
+
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+
+            ft.add(R.id.task_detail_container, fragment);
+            ft.commit();
+
+
         } else {
             Log.d(TAG, "taskEditRequest: onepane");
             Intent detailIntent = new Intent(this, AddEditActivity.class);
@@ -68,4 +86,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onEditClick(Task task) {
+        taskEditRequest(task);
+    }
+
+    @Override
+    public void onDeleteClick(Task task) {
+        getContentResolver().delete(TaskContract.buildTaskUri(task.getId()), null, null);
+    }
 }

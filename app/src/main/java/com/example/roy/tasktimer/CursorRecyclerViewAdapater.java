@@ -2,6 +2,7 @@ package com.example.roy.tasktimer;
 
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +14,13 @@ import android.widget.TextView;
  */
 
 class CursorRecyclerViewAdapater extends RecyclerView.Adapter<CursorRecyclerViewAdapater.TaskViewHolder> {
+    private static final String TAG = "CursorRecyclerViewAdapa";
     private Cursor cursor;
+    private OnTaskClickListener listener;
 
-    public CursorRecyclerViewAdapater(Cursor cursor) {
+    public CursorRecyclerViewAdapater(Cursor cursor, OnTaskClickListener listener) {
         this.cursor = cursor;
+        this.listener = listener;
     }
 
     @Override
@@ -36,10 +40,33 @@ class CursorRecyclerViewAdapater extends RecyclerView.Adapter<CursorRecyclerView
             if (!cursor.moveToPosition(position)) {
                 throw new IllegalStateException("couldnt move cursor to position: " + position);
             }
-            holder.name.setText(cursor.getString(cursor.getColumnIndex(TaskContract.Columns.TASK_NAME)));
-            holder.description.setText(cursor.getString(cursor.getColumnIndex(TaskContract.Columns.TASK_DESCRIPTION)));
+            final Task task = new Task(cursor.getLong(cursor.getColumnIndex(TaskContract.Columns._ID)),
+                    cursor.getString(cursor.getColumnIndex(TaskContract.Columns.TASK_NAME)),
+                    cursor.getString(cursor.getColumnIndex(TaskContract.Columns.TASK_DESCRIPTION)),
+                    cursor.getInt(cursor.getColumnIndex(TaskContract.Columns.TASK_SORTORDER)));
+            holder.name.setText(task.getName());
+            holder.description.setText(task.getDescription());
             holder.editButton.setVisibility(View.VISIBLE);
             holder.deleteButton.setVisibility(View.VISIBLE);
+
+            View.OnClickListener onClickListener = new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    switch (view.getId()) {
+                        case R.id.tli_edit:
+                            if (listener != null) listener.onEditClick(task);
+                            break;
+                        case R.id.tli_delete:
+                            if (listener != null) listener.onDeleteClick(task);
+                            break;
+                        default:
+                            Log.d(TAG, "onClick: found unexpected id");
+                    }
+                }
+            };
+
+            holder.editButton.setOnClickListener(onClickListener);
+            holder.deleteButton.setOnClickListener(onClickListener);
         }
     }
 
@@ -78,5 +105,11 @@ class CursorRecyclerViewAdapater extends RecyclerView.Adapter<CursorRecyclerView
             this.editButton = itemView.findViewById(R.id.tli_edit);
             this.deleteButton = itemView.findViewById(R.id.tli_delete);
         }
+    }
+
+    interface OnTaskClickListener {
+        void onEditClick(Task task);
+
+        void onDeleteClick(Task task);
     }
 }

@@ -9,7 +9,6 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +33,8 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         RecyclerView recyclerView = view.findViewById(R.id.task_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapater = new CursorRecyclerViewAdapater(null);
+        adapater = new CursorRecyclerViewAdapater(null,
+                (CursorRecyclerViewAdapater.OnTaskClickListener) getActivity());
         recyclerView.setAdapter(adapater);
         return view;
     }
@@ -49,7 +49,8 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String[] projection = {TaskContract.Columns._ID, TaskContract.Columns.TASK_NAME,
                 TaskContract.Columns.TASK_DESCRIPTION, TaskContract.Columns.TASK_SORTORDER};
-        String sortOrder = TaskContract.Columns.TASK_SORTORDER + ", " + TaskContract.Columns.TASK_NAME;
+        String sortOrder = TaskContract.Columns.TASK_SORTORDER + ", " +
+                TaskContract.Columns.TASK_NAME + " COLLATE NOCASE";
 
         switch (id) {
             case LOADER_ID:
