@@ -6,8 +6,10 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-public class AddEditActivity extends AppCompatActivity implements AddEditActivityFragment.onSaveListener {
+public class AddEditActivity extends AppCompatActivity implements AddEditActivityFragment.onSaveListener,
+        AppDialog.DialogEvents {
     private static final String TAG = "AddEditActivity";
+    public static final int DIALOG_ID_CANCEL_EDIT = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,7 +20,7 @@ public class AddEditActivity extends AppCompatActivity implements AddEditActivit
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        if(getIntent().getExtras() != null){
+        if (getIntent().getExtras() != null) {
             AddEditActivityFragment fragment = new AddEditActivityFragment();
             Bundle args = getIntent().getExtras();
             fragment.setArguments(args);
@@ -34,5 +36,43 @@ public class AddEditActivity extends AppCompatActivity implements AddEditActivit
     @Override
     public void onSaveClicked() {
         finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        FragmentManager fm = getSupportFragmentManager();
+        AddEditActivityFragment fragment = (AddEditActivityFragment)
+                fm.findFragmentById(R.id.content_add_edit);
+        if (fragment.canClose()) {
+            super.onBackPressed();
+        } else {
+            AppDialog dialog = new AppDialog();
+            Bundle args = new Bundle();
+            args.putInt(AppDialog.DIALOG_ID, DIALOG_ID_CANCEL_EDIT);
+            args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.cancelEditDialog_message));
+            args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.cancelEditDialog_positive_caption);
+            args.putInt(AppDialog.DIALOG_NEGATIVE_RID, R.string.cancelEditDialog_negative_caption);
+
+            dialog.setArguments(args);
+            dialog.show(getFragmentManager(), null);
+
+        }
+
+
+    }
+
+    @Override
+    public void onPositiveDialogResult(int dialogId, Bundle args) {
+
+    }
+
+    @Override
+    public void onNegativeDialogResult(int dialogId, Bundle args) {
+        finish();
+    }
+
+    @Override
+    public void onDialogCancelled(int dialogId) {
+
     }
 }

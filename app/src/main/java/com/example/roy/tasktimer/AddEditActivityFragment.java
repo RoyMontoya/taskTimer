@@ -120,4 +120,8 @@ public class AddEditActivityFragment extends Fragment {
         saveListener = null;
     }
 
+    public boolean canClose(){
+        return false;
+    }
+
 }

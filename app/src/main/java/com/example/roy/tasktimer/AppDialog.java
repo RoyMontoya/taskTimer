@@ -21,9 +21,11 @@ public class AppDialog extends DialogFragment {
 
     private DialogEvents dialogEvents;
 
-    interface DialogEvents{
+    interface DialogEvents {
         void onPositiveDialogResult(int dialogId, Bundle args);
+
         void onNegativeDialogResult(int dialogId, Bundle args);
+
         void onDialogCancelled(int dialogId);
     }
 
@@ -38,43 +40,57 @@ public class AppDialog extends DialogFragment {
         int positiveStringId;
         int negativeStringId;
 
-        if(args != null){
+        if (args != null) {
             dialogId = args.getInt(DIALOG_ID);
             messageString = args.getString(DIALOG_MESSAGE);
-            if(dialogId == 0 || messageString == null) {
-                throw new IllegalArgumentException("DIALOG ID OR MESSAGESTRING is missing in the bundle");
+            if (dialogId == 0 || messageString == null) {
+                throw new IllegalArgumentException("DIALOG_ID OR MESSAGE_STRING is missing in the bundle");
             }
             positiveStringId = args.getInt(DIALOG_POSITIVE_RID);
-            if(positiveStringId == 0)positiveStringId = R.string.ok;
+            if (positiveStringId == 0) positiveStringId = R.string.ok;
+
             negativeStringId = args.getInt(DIALOG_NEGATIVE_RID);
-            if(positiveStringId == 0)positiveStringId = R.string.cancel;
-        }else{
-            throw new IllegalArgumentException("bundle was empty, dualog cannot start");
+            if (negativeStringId == 0) negativeStringId = R.string.cancel;
+        } else {
+            throw new IllegalArgumentException("bundle was empty, dialog cannot start");
         }
 
         builder.setMessage(messageString)
                 .setPositiveButton(positiveStringId, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int which) {
-                        dialogEvents.onPositiveDialogResult(dialogId, args);
+                        if (dialogEvents != null)
+                            dialogEvents.onPositiveDialogResult(dialogId, args);
                     }
                 })
                 .setNegativeButton(negativeStringId, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int which) {
-                        dialogEvents.onNegativeDialogResult(dialogId, args);
+                        if (dialogEvents != null)
+                            dialogEvents.onNegativeDialogResult(dialogId, args);
                     }
                 });
 
+        return builder.create();
     }
+
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if(!(context instanceof DialogEvents)){
+        if (!(context instanceof DialogEvents)) {
             throw new ClassCastException(context.toString() + "must implement interface DialogEvents");
         }
         dialogEvents = (DialogEvents) context;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if (!(activity instanceof DialogEvents)) {
+            throw new ClassCastException(activity.toString() + "must implement interface DialogEvents");
+        }
+        dialogEvents = (DialogEvents) activity;
     }
 
     @Override
@@ -85,11 +101,9 @@ public class AppDialog extends DialogFragment {
 
     @Override
     public void onCancel(DialogInterface dialog) {
-        
+        if (dialogEvents != null) {
+            dialogEvents.onDialogCancelled(getArguments().getInt(DIALOG_ID));
+        }
     }
-
-    @Override
-    public void onDismiss(DialogInterface dialog) {
-        super.onDismiss(dialog);
-    }
+    
 }
