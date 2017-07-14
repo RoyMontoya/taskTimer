@@ -2,6 +2,7 @@ package com.example.roy.tasktimer;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -10,7 +11,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity implements CursorRecyclerViewAdapater.OnTaskClickListener {
+public class MainActivity extends AppCompatActivity implements CursorRecyclerViewAdapater.OnTaskClickListener, AddEditActivityFragment.onSaveListener {
 
     private static final String TAG = "MainActivity";
     private boolean twoPane = false;
@@ -76,8 +77,6 @@ public class MainActivity extends AppCompatActivity implements CursorRecyclerVie
 
             ft.replace(R.id.task_details_container, fragment);
             ft.commit();
-
-
         } else {
             Log.d(TAG, "taskEditRequest: onepane");
             Intent detailIntent = new Intent(this, AddEditActivity.class);
@@ -94,5 +93,14 @@ public class MainActivity extends AppCompatActivity implements CursorRecyclerVie
     @Override
     public void onDeleteClick(Task task) {
         getContentResolver().delete(TaskContract.buildTaskUri(task.getId()), null, null);
+    }
+
+    @Override
+    public void onSaveClicked() {
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment fragment = fm.findFragmentById(R.id.task_details_container);
+        if (fragment != null) {
+           fm.beginTransaction().remove(fragment).commit();
+        }
     }
 }

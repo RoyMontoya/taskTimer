@@ -19,4 +19,6 @@
         \n\n Tasks with lower sort order will be placed first.
         \n\n tapping a task will start the timer
         \n\n each task has edit button to change the content</string>
+    <string name="ok">OK</string>
+    <string name="cancel">CANCEL</string>
 </resources>

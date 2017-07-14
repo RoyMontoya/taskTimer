@@ -1,7 +1,9 @@
 package com.example.roy.tasktimer;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -23,13 +25,18 @@ public class AddEditActivityFragment extends Fragment {
     private EditText descriptionTextView;
     private EditText sortOrderTextView;
     private Button saveButton;
+    private onSaveListener saveListener;
+
+    interface onSaveListener {
+        void onSaveClicked();
+    }
 
     public AddEditActivityFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             final Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_edit, container, false);
 
         nameTextView = view.findViewById(R.id.addedit_name);
@@ -88,9 +95,29 @@ public class AddEditActivityFragment extends Fragment {
                         }
                         break;
                 }
+                if(saveListener != null) saveListener.onSaveClicked();
             }
         });
 
         return view;
     }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        Activity activity = getActivity();
+        if (!(activity instanceof onSaveListener)) {
+            throw new ClassCastException(activity.getClass().getSimpleName()
+                    + "must implemente onSaveListener interface");
+        }
+        saveListener = (onSaveListener) activity;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        saveListener = null;
+    }
+
 }
