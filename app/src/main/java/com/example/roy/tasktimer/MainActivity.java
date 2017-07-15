@@ -1,15 +1,22 @@
 package com.example.roy.tasktimer;
 
+import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements CursorRecyclerViewAdapater.OnTaskClickListener,
         AddEditActivityFragment.onSaveListener,
@@ -19,6 +26,8 @@ public class MainActivity extends AppCompatActivity implements CursorRecyclerVie
     private boolean twoPane = false;
     public static final int DIALOG_ID_DELETE = 1;
     public static final int DIALOG_ID_CANCEL_EDIT = 2;
+    private AlertDialog dialog = null;
+
     private static final String TASK_ID = "TaskId";
 
     @Override
@@ -59,13 +68,49 @@ public class MainActivity extends AppCompatActivity implements CursorRecyclerVie
 
                 break;
             case R.id.menumain_showAbout:
-
+                showAboutDialog();
                 break;
             case R.id.manumain_generate:
 
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void showAboutDialog() {
+        @SuppressLint("InflateParams") View messageView = getLayoutInflater().inflate(R.layout.about, null, false);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.app_name);
+        builder.setIcon(R.mipmap.ic_clock);
+        builder.setView(messageView);
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (dialog != null && dialog.isShowing()) dialog.dismiss();
+            }
+        });
+
+        dialog = builder.create();
+        dialog.setCanceledOnTouchOutside(true);
+
+        TextView textView = (TextView) messageView.findViewById(R.id.about_version);
+        textView.setText("v" + BuildConfig.VERSION_NAME);
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            final TextView weblink = (TextView) messageView.findViewById(R.id.about_clickable_link);
+            weblink.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String url = weblink.getText().toString();
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(url));
+                    startActivity(i);
+                }
+            });
+        }
+
+        dialog.show();
     }
 
     public void taskEditRequest(Task task) {
@@ -104,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements CursorRecyclerVie
         args.putLong(TASK_ID, task.getId());
 
         dialog.setArguments(args);
-        dialog.show(getFragmentManager(), null);
+        dialog.show(getSupportFragmentManager(), null);
     }
 
     @Override
@@ -149,6 +194,12 @@ public class MainActivity extends AppCompatActivity implements CursorRecyclerVie
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        if (dialog != null && dialog.isShowing()) dialog.dismiss();
+    }
+
+    @Override
     public void onBackPressed() {
         FragmentManager fm = getSupportFragmentManager();
         AddEditActivityFragment fragment = (AddEditActivityFragment)
@@ -164,7 +215,7 @@ public class MainActivity extends AppCompatActivity implements CursorRecyclerVie
             args.putInt(AppDialog.DIALOG_NEGATIVE_RID, R.string.cancelEditDialog_negative_caption);
 
             dialog.setArguments(args);
-            dialog.show(getFragmentManager(), null);
+            dialog.show(getSupportFragmentManager(), null);
 
         }
 

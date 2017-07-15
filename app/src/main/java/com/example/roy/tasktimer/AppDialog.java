@@ -1,18 +1,19 @@
 package com.example.roy.tasktimer;
 
-import android.app.Activity;
+
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatDialogFragment;
 
 /**
  * Created by Roy on 7/13/17.
  */
 
-public class AppDialog extends DialogFragment {
+public class AppDialog extends AppCompatDialogFragment {
 
     public static final String DIALOG_ID = "id";
     public static final String DIALOG_MESSAGE = "message";
@@ -21,14 +22,7 @@ public class AppDialog extends DialogFragment {
 
     private DialogEvents dialogEvents;
 
-    interface DialogEvents {
-        void onPositiveDialogResult(int dialogId, Bundle args);
-
-        void onNegativeDialogResult(int dialogId, Bundle args);
-
-        void onDialogCancelled(int dialogId);
-    }
-
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
@@ -74,7 +68,6 @@ public class AppDialog extends DialogFragment {
         return builder.create();
     }
 
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -82,15 +75,6 @@ public class AppDialog extends DialogFragment {
             throw new ClassCastException(context.toString() + "must implement interface DialogEvents");
         }
         dialogEvents = (DialogEvents) context;
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        if (!(activity instanceof DialogEvents)) {
-            throw new ClassCastException(activity.toString() + "must implement interface DialogEvents");
-        }
-        dialogEvents = (DialogEvents) activity;
     }
 
     @Override
@@ -105,5 +89,13 @@ public class AppDialog extends DialogFragment {
             dialogEvents.onDialogCancelled(getArguments().getInt(DIALOG_ID));
         }
     }
-    
+
+    interface DialogEvents {
+        void onPositiveDialogResult(int dialogId, Bundle args);
+
+        void onNegativeDialogResult(int dialogId, Bundle args);
+
+        void onDialogCancelled(int dialogId);
+    }
+
 }

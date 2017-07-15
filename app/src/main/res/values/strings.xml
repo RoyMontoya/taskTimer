@@ -26,4 +26,10 @@
     <string name="cancelEditDialog_message">You have unsaved changes, do you want to leave and discard the changes or continue editing?</string>
     <string name="cancelEditDialog_positive_caption">Continue editing</string>
     <string name="cancelEditDialog_negative_caption">Abandon changes</string>
+    <string name="about_copyright">Copyright \u00a9 2017 LearnProgramming academy</string>
+    <string name="about_weblink">Instructions available www.learnprogramming.academy</string>
+    <string name="about_weblink_v16">Instructions available </string>
+    <string name="weblink_clickable_v16"><u>http://www.learnprogramming.academy</u></string>
+    <string name="about_email">For support email taskTimer@learnprogramming.academy</string>
+    <string name="about_credits">icon derived from <b>analog clock</b> at openclipart.com by <b> anonymous</b></string>
 </resources>
