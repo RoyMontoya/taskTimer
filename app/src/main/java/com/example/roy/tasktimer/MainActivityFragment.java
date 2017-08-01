@@ -15,14 +15,20 @@ import android.view.ViewGroup;
 
 import java.security.InvalidParameterException;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * A placeholder fragment containing a simple view.
  */
 public class MainActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private CursorRecyclerViewAdapater adapater;
+    private CursorRecyclerViewAdapter adapater;
     private static final String TAG = "MainActivityFragment";
     public static final int LOADER_ID = 0;
+    
+    @BindView(R.id.task_list)
+    RecyclerView recyclerView;
 
     public MainActivityFragment() {
     }
@@ -31,12 +37,16 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
-        RecyclerView recyclerView = view.findViewById(R.id.task_list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapater = new CursorRecyclerViewAdapater(null,
-                (CursorRecyclerViewAdapater.OnTaskClickListener) getActivity());
-        recyclerView.setAdapter(adapater);
+        ButterKnife.bind(this, view);
+        setupRecyclerView();
         return view;
+    }
+
+    private void setupRecyclerView() {
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapater = new CursorRecyclerViewAdapter(null,
+                (CursorRecyclerViewAdapter.OnTaskClickListener) getActivity());
+        recyclerView.setAdapter(adapater);
     }
 
     @Override

@@ -18,7 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity implements CursorRecyclerViewAdapater.OnTaskClickListener,
+public class MainActivity extends AppCompatActivity implements CursorRecyclerViewAdapter.OnTaskClickListener,
         AddEditActivityFragment.onSaveListener,
         AppDialog.DialogEvents {
 

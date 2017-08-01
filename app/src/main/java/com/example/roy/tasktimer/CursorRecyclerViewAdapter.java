@@ -9,16 +9,19 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by Roy on 7/12/17.
  */
 
-class CursorRecyclerViewAdapater extends RecyclerView.Adapter<CursorRecyclerViewAdapater.TaskViewHolder> {
+class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecyclerViewAdapter.TaskViewHolder> {
     private static final String TAG = "CursorRecyclerViewAdapa";
     private Cursor cursor;
     private OnTaskClickListener listener;
 
-    public CursorRecyclerViewAdapater(Cursor cursor, OnTaskClickListener listener) {
+    public CursorRecyclerViewAdapter(Cursor cursor, OnTaskClickListener listener) {
         this.cursor = cursor;
         this.listener = listener;
     }
@@ -92,24 +95,25 @@ class CursorRecyclerViewAdapater extends RecyclerView.Adapter<CursorRecyclerView
         return oldCursor;
     }
 
-    static class TaskViewHolder extends RecyclerView.ViewHolder {
-        TextView name;
-        TextView description;
-        ImageButton editButton;
-        ImageButton deleteButton;
-
-        TaskViewHolder(View itemView) {
-            super(itemView);
-            this.name = itemView.findViewById(R.id.tli_name);
-            this.description = itemView.findViewById(R.id.tli_description);
-            this.editButton = itemView.findViewById(R.id.tli_edit);
-            this.deleteButton = itemView.findViewById(R.id.tli_delete);
-        }
-    }
-
     interface OnTaskClickListener {
         void onEditClick(Task task);
 
         void onDeleteClick(Task task);
+    }
+
+    static class TaskViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.tli_name)
+        TextView name;
+        @BindView(R.id.tli_description)
+        TextView description;
+        @BindView(R.id.tli_edit)
+        ImageButton editButton;
+        @BindView(R.id.tli_delete)
+        ImageButton deleteButton;
+
+        TaskViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
     }
 }

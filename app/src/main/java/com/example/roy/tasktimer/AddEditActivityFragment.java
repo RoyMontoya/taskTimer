@@ -12,24 +12,25 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * A placeholder fragment containing a simple view.
  */
 public class AddEditActivityFragment extends Fragment {
 
-    public enum FragmentEditMode {EDIT, ADD}
+    @BindView(R.id.addedit_name)
+    EditText nameTextView;
+    @BindView(R.id.addedit_description)
+    EditText descriptionTextView;
+    @BindView(R.id.addedit_sortoder)
+    EditText sortOrderTextView;
+    @BindView(R.id.addedit_save)
+    Button saveButton;
 
     private FragmentEditMode mode;
-
-    private EditText nameTextView;
-    private EditText descriptionTextView;
-    private EditText sortOrderTextView;
-    private Button saveButton;
     private onSaveListener saveListener;
-
-    interface onSaveListener {
-        void onSaveClicked();
-    }
 
     public AddEditActivityFragment() {
     }
@@ -39,10 +40,7 @@ public class AddEditActivityFragment extends Fragment {
                              final Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_edit, container, false);
 
-        nameTextView = view.findViewById(R.id.addedit_name);
-        descriptionTextView = view.findViewById(R.id.addedit_description);
-        sortOrderTextView = view.findViewById(R.id.addedit_sortoder);
-        saveButton = view.findViewById(R.id.addedit_save);
+        ButterKnife.bind(this, view);
 
         Bundle args = getArguments();
         final Task task;
@@ -95,7 +93,7 @@ public class AddEditActivityFragment extends Fragment {
                         }
                         break;
                 }
-                if(saveListener != null) saveListener.onSaveClicked();
+                if (saveListener != null) saveListener.onSaveClicked();
             }
         });
 
@@ -120,8 +118,14 @@ public class AddEditActivityFragment extends Fragment {
         saveListener = null;
     }
 
-    public boolean canClose(){
+    public boolean canClose() {
         return false;
+    }
+
+    private enum FragmentEditMode {EDIT, ADD}
+
+    interface onSaveListener {
+        void onSaveClicked();
     }
 
 }
