@@ -1,7 +1,6 @@
 package com.example.roy.tasktimer;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -18,17 +17,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.jakewharton.rxbinding.view.RxView;
+
 public class MainActivity extends AppCompatActivity implements CursorRecyclerViewAdapter.OnTaskClickListener,
         AddEditActivityFragment.onSaveListener,
         AppDialog.DialogEvents {
 
-    private static final String TAG = "MainActivity";
-    private boolean twoPane = false;
     public static final int DIALOG_ID_DELETE = 1;
     public static final int DIALOG_ID_CANCEL_EDIT = 2;
-    private AlertDialog dialog = null;
-
+    private static final String TAG = "MainActivity";
     private static final String TASK_ID = "TaskId";
+    private boolean twoPane = false;
+    private AlertDialog dialog = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,11 +84,8 @@ public class MainActivity extends AppCompatActivity implements CursorRecyclerVie
         builder.setTitle(R.string.app_name);
         builder.setIcon(R.mipmap.ic_clock);
         builder.setView(messageView);
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                if (dialog != null && dialog.isShowing()) dialog.dismiss();
-            }
+        builder.setPositiveButton(R.string.ok, (dialogInterface, i) -> {
+            if (dialog != null && dialog.isShowing()) dialog.dismiss();
         });
 
         dialog = builder.create();
@@ -98,16 +95,14 @@ public class MainActivity extends AppCompatActivity implements CursorRecyclerVie
         textView.setText("v" + BuildConfig.VERSION_NAME);
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            final TextView weblink = (TextView) messageView.findViewById(R.id.about_clickable_link);
-            weblink.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    String url = weblink.getText().toString();
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setData(Uri.parse(url));
-                    startActivity(i);
-                }
+            final TextView weblink = messageView.findViewById(R.id.about_clickable_link);
+            RxView.clicks(weblink).subscribe(aVoid -> {
+                String url = weblink.getText().toString();
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
             });
+
         }
 
         dialog.show();

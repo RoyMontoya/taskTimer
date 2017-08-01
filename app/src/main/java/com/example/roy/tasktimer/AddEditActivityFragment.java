@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.jakewharton.rxbinding.view.RxView;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -59,42 +61,39 @@ public class AddEditActivityFragment extends Fragment {
             mode = FragmentEditMode.ADD;
         }
 
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int sortOder;
-                if (sortOrderTextView.length() > 0) {
-                    sortOder = Integer.parseInt(sortOrderTextView.getText().toString());
-                } else {
-                    sortOder = 0;
-                }
-
-                ContentResolver contentResolver = getActivity().getContentResolver();
-                ContentValues contentValues = new ContentValues();
-
-                switch (mode) {
-                    case EDIT:
-                        if (!nameTextView.getText().toString().equals(task.getName()))
-                            contentValues.put(TaskContract.Columns.TASK_NAME, nameTextView.getText().toString());
-                        if (!descriptionTextView.getText().toString().equals(task.getDescription()))
-                            contentValues.put(TaskContract.Columns.TASK_DESCRIPTION, descriptionTextView.getText().toString());
-                        if (sortOder != 0)
-                            contentValues.put(TaskContract.Columns.TASK_SORTORDER, sortOder);
-                        if (contentValues.size() != 0) {
-                            contentResolver.update(TaskContract.buildTaskUri(task.getId()), contentValues, null, null);
-                        }
-                        break;
-                    case ADD:
-                        if (nameTextView.length() > 0) {
-                            contentValues.put(TaskContract.Columns.TASK_NAME, nameTextView.getText().toString());
-                            contentValues.put(TaskContract.Columns.TASK_DESCRIPTION, descriptionTextView.getText().toString());
-                            contentValues.put(TaskContract.Columns.TASK_SORTORDER, sortOder);
-                            contentResolver.insert(TaskContract.CONTENT_URI, contentValues);
-                        }
-                        break;
-                }
-                if (saveListener != null) saveListener.onSaveClicked();
+        RxView.clicks(saveButton).subscribe(aVoid -> {
+            int sortOder;
+            if (sortOrderTextView.length() > 0) {
+                sortOder = Integer.parseInt(sortOrderTextView.getText().toString());
+            } else {
+                sortOder = 0;
             }
+
+            ContentResolver contentResolver = getActivity().getContentResolver();
+            ContentValues contentValues = new ContentValues();
+
+            switch (mode) {
+                case EDIT:
+                    if (!nameTextView.getText().toString().equals(task.getName()))
+                        contentValues.put(TaskContract.Columns.TASK_NAME, nameTextView.getText().toString());
+                    if (!descriptionTextView.getText().toString().equals(task.getDescription()))
+                        contentValues.put(TaskContract.Columns.TASK_DESCRIPTION, descriptionTextView.getText().toString());
+                    if (sortOder != 0)
+                        contentValues.put(TaskContract.Columns.TASK_SORTORDER, sortOder);
+                    if (contentValues.size() != 0) {
+                        contentResolver.update(TaskContract.buildTaskUri(task.getId()), contentValues, null, null);
+                    }
+                    break;
+                case ADD:
+                    if (nameTextView.length() > 0) {
+                        contentValues.put(TaskContract.Columns.TASK_NAME, nameTextView.getText().toString());
+                        contentValues.put(TaskContract.Columns.TASK_DESCRIPTION, descriptionTextView.getText().toString());
+                        contentValues.put(TaskContract.Columns.TASK_SORTORDER, sortOder);
+                        contentResolver.insert(TaskContract.CONTENT_URI, contentValues);
+                    }
+                    break;
+            }
+            if (saveListener != null) saveListener.onSaveClicked();
         });
 
         return view;

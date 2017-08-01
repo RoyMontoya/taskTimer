@@ -2,12 +2,13 @@ package com.example.roy.tasktimer;
 
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import com.jakewharton.rxbinding.view.RxView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,24 +53,12 @@ class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecyclerViewA
             holder.editButton.setVisibility(View.VISIBLE);
             holder.deleteButton.setVisibility(View.VISIBLE);
 
-            View.OnClickListener onClickListener = new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    switch (view.getId()) {
-                        case R.id.tli_edit:
-                            if (listener != null) listener.onEditClick(task);
-                            break;
-                        case R.id.tli_delete:
-                            if (listener != null) listener.onDeleteClick(task);
-                            break;
-                        default:
-                            Log.d(TAG, "onClick: found unexpected id");
-                    }
-                }
-            };
-
-            holder.editButton.setOnClickListener(onClickListener);
-            holder.deleteButton.setOnClickListener(onClickListener);
+            RxView.clicks(holder.editButton).subscribe(aVoid -> {
+                if (listener != null) listener.onEditClick(task);
+            });
+            RxView.clicks(holder.deleteButton).subscribe(aVoid -> {
+                if (listener != null) listener.onDeleteClick(task);
+            });
         }
     }
 

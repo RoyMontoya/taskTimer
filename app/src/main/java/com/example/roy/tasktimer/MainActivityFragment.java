@@ -23,12 +23,11 @@ import butterknife.ButterKnife;
  */
 public class MainActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private CursorRecyclerViewAdapter adapater;
-    private static final String TAG = "MainActivityFragment";
     public static final int LOADER_ID = 0;
-    
+    private static final String TAG = "MainActivityFragment";
     @BindView(R.id.task_list)
     RecyclerView recyclerView;
+    private CursorRecyclerViewAdapter adapater;
 
     public MainActivityFragment() {
     }
