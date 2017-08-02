@@ -1,4 +1,4 @@
-package com.example.roy.tasktimer;
+package com.example.roy.tasktimer.model;
 
 import java.io.Serializable;
 
@@ -6,13 +6,12 @@ import java.io.Serializable;
  * Created by Roy on 7/11/17.
  */
 
-class Task implements Serializable {
+public class Task implements Serializable {
     public static final long serialVersionUID = 20161120L;
-
-    private long m_id;
     private final String mName;
     private final String mDescription;
     private final int mSortOrder;
+    private long m_id;
 
     public Task(long id, String mName, String mDescription, int mSortOrder) {
         this.m_id = id;
@@ -25,6 +24,10 @@ class Task implements Serializable {
         return m_id;
     }
 
+    public void setId(long id) {
+        this.m_id = m_id;
+    }
+
     public String getName() {
         return mName;
     }
@@ -35,10 +38,6 @@ class Task implements Serializable {
 
     public int getSortOrder() {
         return mSortOrder;
-    }
-
-    public void setId(long id) {
-        this.m_id = m_id;
     }
 
     @Override

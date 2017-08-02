@@ -1,4 +1,4 @@
-package com.example.roy.tasktimer;
+package com.example.roy.tasktimer.main;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -17,11 +17,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.roy.tasktimer.BuildConfig;
+import com.example.roy.tasktimer.R;
+import com.example.roy.tasktimer.addedit.AddEditActivity;
+import com.example.roy.tasktimer.addedit.AddEditActivityFragment;
+import com.example.roy.tasktimer.data.TaskContract;
+import com.example.roy.tasktimer.dialog.AppDialog;
+import com.example.roy.tasktimer.listeners.DialogEventListener;
+import com.example.roy.tasktimer.listeners.OnTaskClickListener;
+import com.example.roy.tasktimer.listeners.onSaveListener;
+import com.example.roy.tasktimer.model.Task;
 import com.jakewharton.rxbinding.view.RxView;
 
-public class MainActivity extends AppCompatActivity implements CursorRecyclerViewAdapter.OnTaskClickListener,
-        AddEditActivityFragment.onSaveListener,
-        AppDialog.DialogEvents {
+public class MainActivity extends AppCompatActivity implements OnTaskClickListener,
+        onSaveListener,
+        DialogEventListener {
 
     public static final int DIALOG_ID_DELETE = 1;
     public static final int DIALOG_ID_CANCEL_EDIT = 2;

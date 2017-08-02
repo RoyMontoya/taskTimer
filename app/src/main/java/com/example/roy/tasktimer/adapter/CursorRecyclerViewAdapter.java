@@ -1,4 +1,4 @@
-package com.example.roy.tasktimer;
+package com.example.roy.tasktimer.adapter;
 
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +8,10 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.roy.tasktimer.R;
+import com.example.roy.tasktimer.data.TaskContract;
+import com.example.roy.tasktimer.listeners.OnTaskClickListener;
+import com.example.roy.tasktimer.model.Task;
 import com.jakewharton.rxbinding.view.RxView;
 
 import butterknife.BindView;
@@ -17,7 +21,7 @@ import butterknife.ButterKnife;
  * Created by Roy on 7/12/17.
  */
 
-class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecyclerViewAdapter.TaskViewHolder> {
+public class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecyclerViewAdapter.TaskViewHolder> {
     private static final String TAG = "CursorRecyclerViewAdapa";
     private Cursor cursor;
     private OnTaskClickListener listener;
@@ -70,7 +74,7 @@ class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecyclerViewA
         return cursor.getCount();
     }
 
-    Cursor swapCursor(Cursor newCursor) {
+    public Cursor swapCursor(Cursor newCursor) {
         if (newCursor == cursor) return null;
 
         final Cursor oldCursor = cursor;
@@ -84,11 +88,6 @@ class CursorRecyclerViewAdapter extends RecyclerView.Adapter<CursorRecyclerViewA
         return oldCursor;
     }
 
-    interface OnTaskClickListener {
-        void onEditClick(Task task);
-
-        void onDeleteClick(Task task);
-    }
 
     static class TaskViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tli_name)

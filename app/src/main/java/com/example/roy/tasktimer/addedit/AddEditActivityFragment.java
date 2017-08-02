@@ -1,4 +1,4 @@
-package com.example.roy.tasktimer;
+package com.example.roy.tasktimer.addedit;
 
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -12,6 +12,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.roy.tasktimer.R;
+import com.example.roy.tasktimer.data.TaskContract;
+import com.example.roy.tasktimer.listeners.onSaveListener;
+import com.example.roy.tasktimer.model.Task;
 import com.jakewharton.rxbinding.view.RxView;
 
 import butterknife.BindView;
@@ -122,9 +126,5 @@ public class AddEditActivityFragment extends Fragment {
     }
 
     private enum FragmentEditMode {EDIT, ADD}
-
-    interface onSaveListener {
-        void onSaveClicked();
-    }
 
 }

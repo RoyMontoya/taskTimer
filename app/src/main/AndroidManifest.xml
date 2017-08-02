@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".main.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -21,18 +21,18 @@
         </activity>
 
         <provider
-            android:name=".AppProvider"
+            android:name=".data.AppProvider"
             android:authorities="com.example.roy.tasktimer"
             android:exported="false" />
 
         <activity
-            android:name=".AddEditActivity"
+            android:name=".addedit.AddEditActivity"
             android:label="@string/title_activity_add_edit"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.roy.tasktimer.MainActivity" />
+                android:value="com.example.roy.tasktimer.main.MainActivity" />
         </activity>
     </application>
 

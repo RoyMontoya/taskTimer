@@ -1,4 +1,4 @@
-package com.example.roy.tasktimer;
+package com.example.roy.tasktimer.addedit;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -7,10 +7,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-public class AddEditActivity extends AppCompatActivity implements AddEditActivityFragment.onSaveListener,
-        AppDialog.DialogEvents {
-    private static final String TAG = "AddEditActivity";
+import com.example.roy.tasktimer.R;
+import com.example.roy.tasktimer.dialog.AppDialog;
+import com.example.roy.tasktimer.listeners.DialogEventListener;
+import com.example.roy.tasktimer.listeners.onSaveListener;
+
+public class AddEditActivity extends AppCompatActivity implements onSaveListener,
+        DialogEventListener {
     public static final int DIALOG_ID_CANCEL_EDIT = 1;
+    private static final String TAG = "AddEditActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

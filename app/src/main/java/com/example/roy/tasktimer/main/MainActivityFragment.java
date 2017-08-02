@@ -1,4 +1,4 @@
-package com.example.roy.tasktimer;
+package com.example.roy.tasktimer.main;
 
 import android.database.Cursor;
 import android.os.Bundle;
@@ -12,6 +12,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.roy.tasktimer.R;
+import com.example.roy.tasktimer.adapter.CursorRecyclerViewAdapter;
+import com.example.roy.tasktimer.data.TaskContract;
+import com.example.roy.tasktimer.listeners.OnTaskClickListener;
 
 import java.security.InvalidParameterException;
 
@@ -44,7 +49,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     private void setupRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapater = new CursorRecyclerViewAdapter(null,
-                (CursorRecyclerViewAdapter.OnTaskClickListener) getActivity());
+                (OnTaskClickListener) getActivity());
         recyclerView.setAdapter(adapater);
     }
 
@@ -80,4 +85,5 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     public void onLoaderReset(Loader<Cursor> loader) {
         adapater.swapCursor(null);
     }
+
 }

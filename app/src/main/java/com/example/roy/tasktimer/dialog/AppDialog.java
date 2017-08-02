@@ -1,4 +1,4 @@
-package com.example.roy.tasktimer;
+package com.example.roy.tasktimer.dialog;
 
 
 import android.app.Dialog;
@@ -8,6 +8,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialogFragment;
+
+import com.example.roy.tasktimer.R;
+import com.example.roy.tasktimer.listeners.DialogEventListener;
 
 /**
  * Created by Roy on 7/13/17.
@@ -20,7 +23,7 @@ public class AppDialog extends AppCompatDialogFragment {
     public static final String DIALOG_POSITIVE_RID = "positive_rid";
     public static final String DIALOG_NEGATIVE_RID = "negative_rid";
 
-    private DialogEvents dialogEvents;
+    private DialogEventListener dialogEvents;
 
     @NonNull
     @Override
@@ -71,10 +74,10 @@ public class AppDialog extends AppCompatDialogFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (!(context instanceof DialogEvents)) {
-            throw new ClassCastException(context.toString() + "must implement interface DialogEvents");
+        if (!(context instanceof DialogEventListener)) {
+            throw new ClassCastException(context.toString() + "must implement interface DialogEventListener");
         }
-        dialogEvents = (DialogEvents) context;
+        dialogEvents = (DialogEventListener) context;
     }
 
     @Override
@@ -88,14 +91,6 @@ public class AppDialog extends AppCompatDialogFragment {
         if (dialogEvents != null) {
             dialogEvents.onDialogCancelled(getArguments().getInt(DIALOG_ID));
         }
-    }
-
-    interface DialogEvents {
-        void onPositiveDialogResult(int dialogId, Bundle args);
-
-        void onNegativeDialogResult(int dialogId, Bundle args);
-
-        void onDialogCancelled(int dialogId);
     }
 
 }

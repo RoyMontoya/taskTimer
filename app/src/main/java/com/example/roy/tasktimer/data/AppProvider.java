@@ -1,4 +1,4 @@
-package com.example.roy.tasktimer;
+package com.example.roy.tasktimer.data;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -19,23 +19,19 @@ import static android.content.ContentValues.TAG;
 
 public class AppProvider extends ContentProvider {
 
-    private AppDatabase openHelper;
     static final String CONTENT_AUTHORITY = "com.example.roy.tasktimer";
     public final static Uri CONTENT_AUTHORITY_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
-    public static final UriMatcher uriMatcher = buildUriMatcher();
-
     private static final int TASKS = 100;
     private static final int TASKS_ID = 101;
-
+    public static final UriMatcher uriMatcher = buildUriMatcher();
     private static final int TIMINGS = 200;
     private static final int TIMINGS_ID = 201;
+    private static final int TASKS_DURATION = 400;
 
 //    private static final int TASKS_TIMINGS = 300;
 //    private static final int TASKS_TIMINGS_ID = 301;
-
-
-    private static final int TASKS_DURATION = 400;
     private static final int TASKS_DURATION_ID = 401;
+    private AppDatabase openHelper;
 
     private static UriMatcher buildUriMatcher() {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -155,7 +151,7 @@ public class AppProvider extends ContentProvider {
             default:
                 throw new IllegalStateException("Unknown uri:" + uri);
         }
-        if(recordId > 0){
+        if (recordId > 0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
         return resultUri;
@@ -200,7 +196,7 @@ public class AppProvider extends ContentProvider {
             default:
                 throw new IllegalStateException("Unknown uri:" + uri);
         }
-        if(count > 0){
+        if (count > 0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
         return count;
@@ -245,7 +241,7 @@ public class AppProvider extends ContentProvider {
             default:
                 throw new IllegalStateException("Unknown uri:" + uri);
         }
-        if(count > 0){
+        if (count > 0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
         return count;
