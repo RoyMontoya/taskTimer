@@ -1,6 +1,7 @@
 package com.example.roy.tasktimer;
 
 import android.app.Application;
+import android.content.Context;
 
 import javax.inject.Singleton;
 
@@ -15,7 +16,7 @@ public class AppModule {
 
     Application application;
 
-    AppModule(Application application) {
+    public AppModule(Application application) {
         this.application = application;
     }
 
@@ -23,6 +24,12 @@ public class AppModule {
     @Singleton
     Application providesApplication() {
         return application;
+    }
+
+    @Provides
+    @Singleton
+    Context providesApplicationContext() {
+        return application.getApplicationContext();
     }
 
 }

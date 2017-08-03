@@ -21,7 +21,7 @@ import com.example.roy.tasktimer.BuildConfig;
 import com.example.roy.tasktimer.R;
 import com.example.roy.tasktimer.addedit.AddEditActivity;
 import com.example.roy.tasktimer.addedit.AddEditActivityFragment;
-import com.example.roy.tasktimer.data.TaskContract;
+import com.example.roy.tasktimer.data.db.TaskContract;
 import com.example.roy.tasktimer.dialog.AppDialog;
 import com.example.roy.tasktimer.listeners.DialogEventListener;
 import com.example.roy.tasktimer.listeners.OnTaskClickListener;

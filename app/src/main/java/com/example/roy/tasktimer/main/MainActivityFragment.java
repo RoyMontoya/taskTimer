@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 
 import com.example.roy.tasktimer.R;
 import com.example.roy.tasktimer.adapter.CursorRecyclerViewAdapter;
-import com.example.roy.tasktimer.data.TaskContract;
+import com.example.roy.tasktimer.data.db.TaskContract;
 import com.example.roy.tasktimer.listeners.OnTaskClickListener;
 
 import java.security.InvalidParameterException;

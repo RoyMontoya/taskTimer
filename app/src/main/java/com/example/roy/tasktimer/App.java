@@ -8,12 +8,12 @@ import android.app.Application;
 
 public class App extends Application {
 
-    AppComponent appComponent;
+    static AppComponent appComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        appComponent = DaggerAppComponent.builder()
+        appComponent =DaggerAppComponent.builder()
                 .appModule(new AppModule(this))
                 .build();
 
@@ -21,7 +21,7 @@ public class App extends Application {
 
     }
 
-    public AppComponent getAppComponent() {
+    public static AppComponent getApplication() {
         return appComponent;
     }
 

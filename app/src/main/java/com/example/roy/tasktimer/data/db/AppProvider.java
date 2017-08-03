@@ -1,4 +1,4 @@
-package com.example.roy.tasktimer.data;
+package com.example.roy.tasktimer.data.db;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -10,8 +10,6 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
-
-import javax.inject.Inject;
 
 import static android.content.ContentValues.TAG;
 
@@ -30,12 +28,11 @@ public class AppProvider extends ContentProvider {
     private static final int TIMINGS_ID = 201;
     private static final int TASKS_DURATION = 400;
 
-//    private static final int TASKS_TIMINGS = 300;
+    //    private static final int TASKS_TIMINGS = 300;
 //    private static final int TASKS_TIMINGS_ID = 301;
     private static final int TASKS_DURATION_ID = 401;
 
-    @Inject
-    AppDatabase openHelper;
+    private AppDatabase openHelper;
 
     private static UriMatcher buildUriMatcher() {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -54,10 +51,7 @@ public class AppProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        DaggerDataComponent.builder()
-                .dataModule(new DataModule(getContext()))
-                .build()
-                .inject(this);
+        openHelper = AppDatabase.getIntance(getContext());
         return true;
     }
 

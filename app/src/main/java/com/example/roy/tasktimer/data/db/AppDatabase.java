@@ -1,4 +1,4 @@
-package com.example.roy.tasktimer.data;
+package com.example.roy.tasktimer.data.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -18,7 +18,7 @@ public class AppDatabase extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    static AppDatabase getIntance(Context context) {
+    public static AppDatabase getIntance(Context context) {
         if (instance == null) {
             instance = new AppDatabase(context);
         }

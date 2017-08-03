@@ -9,7 +9,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.roy.tasktimer.R;
-import com.example.roy.tasktimer.data.TaskContract;
+import com.example.roy.tasktimer.data.db.TaskContract;
 import com.example.roy.tasktimer.listeners.OnTaskClickListener;
 import com.example.roy.tasktimer.model.Task;
 import com.jakewharton.rxbinding.view.RxView;

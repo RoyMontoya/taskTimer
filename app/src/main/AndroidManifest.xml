@@ -22,7 +22,7 @@
         </activity>
 
         <provider
-            android:name=".data.AppProvider"
+            android:name=".data.db.AppProvider"
             android:authorities="com.example.roy.tasktimer"
             android:exported="false" />
 

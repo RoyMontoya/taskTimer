@@ -1,11 +1,11 @@
-package com.example.roy.tasktimer.data;
+package com.example.roy.tasktimer.data.db;
 
 import android.content.ContentUris;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-import static com.example.roy.tasktimer.data.AppProvider.CONTENT_AUTHORITY;
-import static com.example.roy.tasktimer.data.AppProvider.CONTENT_AUTHORITY_URI;
+import static com.example.roy.tasktimer.data.db.AppProvider.CONTENT_AUTHORITY;
+import static com.example.roy.tasktimer.data.db.AppProvider.CONTENT_AUTHORITY_URI;
 
 /**
  * Created by Roy on 7/10/17.

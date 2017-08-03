@@ -13,10 +13,14 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.roy.tasktimer.R;
-import com.example.roy.tasktimer.data.TaskContract;
+import com.example.roy.tasktimer.data.AppDataManager;
+import com.example.roy.tasktimer.data.DataModule;
+import com.example.roy.tasktimer.data.db.TaskContract;
 import com.example.roy.tasktimer.listeners.onSaveListener;
 import com.example.roy.tasktimer.model.Task;
 import com.jakewharton.rxbinding.view.RxView;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,7 +28,7 @@ import butterknife.ButterKnife;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class AddEditActivityFragment extends Fragment {
+public class AddEditActivityFragment extends Fragment implements AddEditContract.View {
 
     @BindView(R.id.addedit_name)
     EditText nameTextView;
@@ -35,7 +39,15 @@ public class AddEditActivityFragment extends Fragment {
     @BindView(R.id.addedit_save)
     Button saveButton;
 
-    private FragmentEditMode mode;
+    @Inject
+    AppDataManager dataManager;
+
+    AddEditContract.Presenter presenter;
+
+    private static final int EDIT = 0;
+    private static final int ADD = 1;
+
+    private int mode;
     private onSaveListener saveListener;
 
     public AddEditActivityFragment() {
@@ -45,8 +57,14 @@ public class AddEditActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              final Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_edit, container, false);
-
         ButterKnife.bind(this, view);
+
+        DaggerAddEditComponent.builder()
+                .dataModule(new DataModule(getActivity().getApplicationContext()))
+                .addEditModule(new AddEditModule(this))
+                .build().inject(this);
+
+        new AddEditPresenter(dataManager, this);
 
         Bundle args = getArguments();
         final Task task;
@@ -56,13 +74,13 @@ public class AddEditActivityFragment extends Fragment {
                 nameTextView.setText(task.getName());
                 descriptionTextView.setText(task.getDescription());
                 sortOrderTextView.setText(String.valueOf(task.getSortOrder()));
-                mode = FragmentEditMode.EDIT;
+                mode = EDIT;
             } else {
-                mode = FragmentEditMode.ADD;
+                mode = ADD;
             }
         } else {
             task = null;
-            mode = FragmentEditMode.ADD;
+            mode = ADD;
         }
 
         RxView.clicks(saveButton).subscribe(aVoid -> {
@@ -121,10 +139,11 @@ public class AddEditActivityFragment extends Fragment {
         saveListener = null;
     }
 
-    public boolean canClose() {
-        return false;
+    @Override
+    public void setPresenter(AddEditContract.Presenter addEditPresenter) {
+        presenter = addEditPresenter;
     }
 
-    private enum FragmentEditMode {EDIT, ADD}
+
 
 }
