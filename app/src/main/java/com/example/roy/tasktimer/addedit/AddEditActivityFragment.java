@@ -1,7 +1,6 @@
 package com.example.roy.tasktimer.addedit;
 
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -39,8 +38,6 @@ public class AddEditActivityFragment extends Fragment implements AddEditContract
 
     @Inject
     AppDataManager dataManager;
-    @Inject
-    ContentResolver appResolver;
 
     AddEditContract.Presenter presenter;
 
@@ -69,7 +66,6 @@ public class AddEditActivityFragment extends Fragment implements AddEditContract
                     descriptionTextView.getText().toString(),
                     sortOrderTextView.getText().toString(),
                     mode);
-
 
             if (saveListener != null) saveListener.onSaveClicked();
         });
@@ -106,28 +102,30 @@ public class AddEditActivityFragment extends Fragment implements AddEditContract
                 .addEditModule(new AddEditModule(this))
                 .build().inject(this);
 
-        new AddEditPresenter(dataManager, appResolver, this);
+        new AddEditPresenter(dataManager, this);
     }
 
+    @Override
+    public Task getTaskArgument() {
+        Bundle args = getArguments();
+        Task task = null;
+        if (args != null) task = (Task) args.getSerializable(Task.class.getSimpleName());
+
+        return task;
+    }
 
     @Override
     public void initializeViews() {
-        Bundle args = getArguments();
-        final Task task;
-        if (args != null) {
-            task = (Task) args.getSerializable(Task.class.getSimpleName());
-            if (task != null) {
-                nameTextView.setText(task.getName());
-                descriptionTextView.setText(task.getDescription());
-                sortOrderTextView.setText(String.valueOf(task.getSortOrder()));
-                mode = AddEditPresenter.EDIT;
-            } else {
-                mode = AddEditPresenter.ADD;
-            }
-        } else {
-            task = null;
-            mode = AddEditPresenter.ADD;
+        Task task = getTaskArgument();
+        mode = AddEditPresenter.ADD;
+
+        if (task != null) {
+            nameTextView.setText(task.getName());
+            descriptionTextView.setText(task.getDescription());
+            sortOrderTextView.setText(String.valueOf(task.getSortOrder()));
+            mode = AddEditPresenter.EDIT;
         }
+
         presenter.setCurrentTask(task);
         configureSaveButton();
     }

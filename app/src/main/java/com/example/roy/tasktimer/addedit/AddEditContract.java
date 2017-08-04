@@ -16,13 +16,15 @@ public class AddEditContract {
         void initializeViews();
 
         void configureSaveButton();
+
+        Task getTaskArgument();
     }
 
     interface Presenter {
 
         boolean canClose();
 
-        void setCurrentTask(Task task);
+        void setCurrentTask(@Nullable Task task);
 
         void addEditCurrentTask(String name, String description, String sortOrder, int mode);
 

@@ -1,6 +1,5 @@
 package com.example.roy.tasktimer.addedit;
 
-import android.content.ContentResolver;
 import android.content.ContentValues;
 
 import com.example.roy.tasktimer.data.AppDataManager;
@@ -18,13 +17,11 @@ public class AddEditPresenter implements AddEditContract.Presenter {
 
     private AppDataManager dataManager;
     private AddEditContract.View view;
-    private ContentResolver contentResolver;
     private Task currentTask;
 
-    AddEditPresenter(AppDataManager data, ContentResolver resolver, AddEditContract.View fragment){
+    AddEditPresenter(AppDataManager data, AddEditContract.View fragment) {
         this.dataManager = data;
         this.view = fragment;
-        this.contentResolver = resolver;
         view.setPresenter(this);
     }
 
@@ -54,7 +51,7 @@ public class AddEditPresenter implements AddEditContract.Presenter {
                 if (sortOder != 0)
                     contentValues.put(TaskContract.Columns.TASK_SORTORDER, sortOder);
                 if (contentValues.size() != 0) {
-                    contentResolver.update(TaskContract.buildTaskUri(currentTask.getId()), contentValues, null, null);
+                    dataManager.updateTaskInDataBase(TaskContract.buildTaskUri(currentTask.getId()), contentValues, null, null);
                 }
                 break;
             case ADD:
@@ -62,7 +59,7 @@ public class AddEditPresenter implements AddEditContract.Presenter {
                     contentValues.put(TaskContract.Columns.TASK_NAME, name);
                     contentValues.put(TaskContract.Columns.TASK_DESCRIPTION, description);
                     contentValues.put(TaskContract.Columns.TASK_SORTORDER, sortOder);
-                    contentResolver.insert(TaskContract.CONTENT_URI, contentValues);
+                    dataManager.insertIntoDatabase(TaskContract.CONTENT_URI, contentValues);
                 }
                 break;
         }
