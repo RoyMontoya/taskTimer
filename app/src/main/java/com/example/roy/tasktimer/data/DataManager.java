@@ -9,7 +9,7 @@ import android.support.annotation.Nullable;
  * Created by Roy on 8/2/17.
  */
 
-interface DataManager {
+public interface DataManager {
 
     void updateTaskInDataBase(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String where, @Nullable String[] selectionArgs);
 

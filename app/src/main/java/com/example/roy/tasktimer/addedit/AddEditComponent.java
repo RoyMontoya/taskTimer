@@ -1,6 +1,5 @@
 package com.example.roy.tasktimer.addedit;
 
-import com.example.roy.tasktimer.AppModule;
 import com.example.roy.tasktimer.data.DataModule;
 import com.example.roy.tasktimer.util.DataScope;
 

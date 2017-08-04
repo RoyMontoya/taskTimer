@@ -2,7 +2,7 @@ package com.example.roy.tasktimer.addedit;
 
 import android.content.ContentValues;
 
-import com.example.roy.tasktimer.data.AppDataManager;
+import com.example.roy.tasktimer.data.DataManager;
 import com.example.roy.tasktimer.data.db.TaskContract;
 import com.example.roy.tasktimer.model.Task;
 
@@ -15,11 +15,11 @@ public class AddEditPresenter implements AddEditContract.Presenter {
     static final int EDIT = 0;
     static final int ADD = 1;
 
-    private AppDataManager dataManager;
+    private DataManager dataManager;
     private AddEditContract.View view;
     private Task currentTask;
 
-    AddEditPresenter(AppDataManager data, AddEditContract.View fragment) {
+    AddEditPresenter(DataManager data, AddEditContract.View fragment) {
         this.dataManager = data;
         this.view = fragment;
         view.setPresenter(this);
