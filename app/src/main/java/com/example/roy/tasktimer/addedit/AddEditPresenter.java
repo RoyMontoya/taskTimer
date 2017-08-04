@@ -1,6 +1,7 @@
 package com.example.roy.tasktimer.addedit;
 
 import com.example.roy.tasktimer.data.AppDataManager;
+import com.example.roy.tasktimer.model.Task;
 
 /**
  * Created by Roy on 8/3/17.
@@ -20,5 +21,15 @@ public class AddEditPresenter implements AddEditContract.Presenter {
     @Override
     public boolean canClose() {
         return false;
+    }
+
+    @Override
+    public void setCurrentTask(Task task) {
+
+    }
+
+    @Override
+    public void addEditCurrentTask(String name, String description, int sortOrder) {
+
     }
 }

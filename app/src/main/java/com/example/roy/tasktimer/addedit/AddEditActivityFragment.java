@@ -5,6 +5,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,38 +58,18 @@ public class AddEditActivityFragment extends Fragment implements AddEditContract
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              final Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_edit, container, false);
-        ButterKnife.bind(this, view);
+        initFragment(view);
+        initializeViews();
 
-        DaggerAddEditComponent.builder()
-                .dataModule(new DataModule(getActivity().getApplicationContext()))
-                .addEditModule(new AddEditModule(this))
-                .build().inject(this);
+        return view;
+    }
 
-        new AddEditPresenter(dataManager, this);
-
-        Bundle args = getArguments();
-        final Task task;
-        if (args != null) {
-            task = (Task) args.getSerializable(Task.class.getSimpleName());
-            if (task != null) {
-                nameTextView.setText(task.getName());
-                descriptionTextView.setText(task.getDescription());
-                sortOrderTextView.setText(String.valueOf(task.getSortOrder()));
-                mode = EDIT;
-            } else {
-                mode = ADD;
-            }
-        } else {
-            task = null;
-            mode = ADD;
-        }
-
+    @Override
+    public void configureSaveButton(@Nullable Task task) {
         RxView.clicks(saveButton).subscribe(aVoid -> {
-            int sortOder;
+            int sortOder = 0;
             if (sortOrderTextView.length() > 0) {
                 sortOder = Integer.parseInt(sortOrderTextView.getText().toString());
-            } else {
-                sortOder = 0;
             }
 
             ContentResolver contentResolver = getActivity().getContentResolver();
@@ -117,14 +98,11 @@ public class AddEditActivityFragment extends Fragment implements AddEditContract
             }
             if (saveListener != null) saveListener.onSaveClicked();
         });
-
-        return view;
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
         Activity activity = getActivity();
         if (!(activity instanceof onSaveListener)) {
             throw new ClassCastException(activity.getClass().getSimpleName()
@@ -144,6 +122,41 @@ public class AddEditActivityFragment extends Fragment implements AddEditContract
         presenter = addEditPresenter;
     }
 
+    @Override
+    public void initFragment(View view) {
+        ButterKnife.bind(this, view);
+
+        DaggerAddEditComponent.builder()
+                .dataModule(new DataModule(getActivity().getApplicationContext()))
+                .addEditModule(new AddEditModule(this))
+                .build().inject(this);
+
+        new AddEditPresenter(dataManager, this);
+    }
 
 
+    @Override
+    public void initializeViews() {
+        Bundle args = getArguments();
+        final Task task ;
+        if (args != null) {
+            task = (Task) args.getSerializable(Task.class.getSimpleName());
+            if (task != null) {
+                nameTextView.setText(task.getName());
+                descriptionTextView.setText(task.getDescription());
+                sortOrderTextView.setText(String.valueOf(task.getSortOrder()));
+                mode = EDIT;
+            } else {
+                mode = ADD;
+            }
+        } else {
+            task = null;
+            mode = ADD;
+        }
+        configureSaveButton(task);
+    }
+
+    public boolean canClose() {
+        return false;
+    }
 }
