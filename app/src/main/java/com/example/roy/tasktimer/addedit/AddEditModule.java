@@ -1,6 +1,5 @@
 package com.example.roy.tasktimer.addedit;
 
-import com.example.roy.tasktimer.data.AppDataManager;
 import com.example.roy.tasktimer.util.PerActivity;
 
 import dagger.Module;
@@ -14,13 +13,13 @@ class AddEditModule {
 
     private AddEditContract.View view;
 
-    AddEditModule(AddEditContract.View fragment){
+    AddEditModule(AddEditContract.View fragment) {
         view = fragment;
     }
 
     @Provides
     @PerActivity
-    AddEditContract.View providesAddEditView(){
+    AddEditContract.View providesAddEditView() {
         return view;
     }
 

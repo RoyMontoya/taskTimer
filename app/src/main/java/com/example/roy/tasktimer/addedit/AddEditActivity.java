@@ -100,4 +100,5 @@ public class AddEditActivity extends AppCompatActivity implements onSaveListener
     public void onDialogCancelled(int dialogId) {
 
     }
+
 }

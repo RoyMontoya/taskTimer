@@ -15,7 +15,7 @@ public class AddEditContract {
 
         void initializeViews();
 
-        void configureSaveButton(@Nullable Task task);
+        void configureSaveButton();
     }
 
     interface Presenter {
@@ -24,7 +24,7 @@ public class AddEditContract {
 
         void setCurrentTask(Task task);
 
-        void addEditCurrentTask(String name, String description, int sortOrder);
+        void addEditCurrentTask(String name, String description, String sortOrder, int mode);
 
     }
 
