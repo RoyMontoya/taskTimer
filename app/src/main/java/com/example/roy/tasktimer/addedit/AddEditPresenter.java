@@ -6,6 +6,8 @@ import com.example.roy.tasktimer.data.DataManager;
 import com.example.roy.tasktimer.data.db.TaskContract;
 import com.example.roy.tasktimer.model.Task;
 
+import javax.inject.Inject;
+
 /**
  * Created by Roy on 8/3/17.
  */
@@ -15,13 +17,19 @@ public class AddEditPresenter implements AddEditContract.Presenter {
     static final int EDIT = 0;
     static final int ADD = 1;
 
-    private DataManager dataManager;
-    private AddEditContract.View view;
+    private final DataManager dataManager;
+    private final AddEditContract.View view;
     private Task currentTask;
 
+
+    @Inject
     AddEditPresenter(DataManager data, AddEditContract.View fragment) {
         this.dataManager = data;
         this.view = fragment;
+    }
+
+    @Inject
+    void setupPresenterInView() {
         view.setPresenter(this);
     }
 
@@ -64,4 +72,5 @@ public class AddEditPresenter implements AddEditContract.Presenter {
                 break;
         }
     }
+
 }

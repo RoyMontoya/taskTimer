@@ -10,6 +10,8 @@ public class MainContract {
 
     interface View extends BaseView<Presenter> {
 
+        void setupRecyclerView();
+
     }
 
     interface Presenter {

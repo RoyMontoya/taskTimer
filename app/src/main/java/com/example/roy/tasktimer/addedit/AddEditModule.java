@@ -1,7 +1,5 @@
 package com.example.roy.tasktimer.addedit;
 
-import com.example.roy.tasktimer.util.PerActivity;
-
 import dagger.Module;
 import dagger.Provides;
 
@@ -9,16 +7,15 @@ import dagger.Provides;
  * Created by Roy on 8/3/17.
  */
 @Module
-class AddEditModule {
+public class AddEditModule {
 
-    private AddEditContract.View view;
+    private final AddEditContract.View view;
 
-    AddEditModule(AddEditContract.View fragment) {
+    public AddEditModule(AddEditContract.View fragment) {
         view = fragment;
     }
 
     @Provides
-    @PerActivity
     AddEditContract.View providesAddEditView() {
         return view;
     }

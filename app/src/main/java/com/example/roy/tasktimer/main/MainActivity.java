@@ -29,6 +29,8 @@ import com.example.roy.tasktimer.listeners.onSaveListener;
 import com.example.roy.tasktimer.model.Task;
 import com.jakewharton.rxbinding.view.RxView;
 
+import javax.inject.Inject;
+
 public class MainActivity extends AppCompatActivity implements OnTaskClickListener,
         onSaveListener,
         DialogEventListener {
@@ -37,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements OnTaskClickListen
     public static final int DIALOG_ID_CANCEL_EDIT = 2;
     private static final String TAG = "MainActivity";
     private static final String TASK_ID = "TaskId";
+    @Inject
+    MainPresenter presenter;
     private boolean twoPane = false;
     private AlertDialog dialog = null;
 
@@ -44,12 +48,29 @@ public class MainActivity extends AppCompatActivity implements OnTaskClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initDagger();
+        initToolbar();
+        checkTwoPaneConfig();
+
+    }
+
+    private void initDagger() {
+        MainActivityFragment fragment = (MainActivityFragment)
+                getSupportFragmentManager().findFragmentById(R.id.fragment);
+        if (fragment != null) {
+            DaggerMainComponent.builder()
+                    .mainModule(new MainModule(fragment))
+                    .build().inject(this);
+        }
+    }
+
+    private void checkTwoPaneConfig() {
+        if (findViewById(R.id.task_details_container) != null) twoPane = true;
+    }
+
+    private void initToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        if (findViewById(R.id.task_details_container) != null) twoPane = true;
-
-
     }
 
     @Override

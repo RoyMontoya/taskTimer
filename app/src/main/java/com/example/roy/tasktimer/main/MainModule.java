@@ -1,7 +1,5 @@
 package com.example.roy.tasktimer.main;
 
-import com.example.roy.tasktimer.util.PerActivity;
-
 import dagger.Module;
 import dagger.Provides;
 
@@ -11,14 +9,13 @@ import dagger.Provides;
 @Module
 public class MainModule {
 
-    private MainContract.View view;
+    private final MainContract.View view;
 
-    MainModule(MainContract.View fragment) {
+    public MainModule(MainContract.View fragment) {
         this.view = fragment;
     }
 
     @Provides
-    @PerActivity
     MainContract.View providesMainView() {
         return view;
     }

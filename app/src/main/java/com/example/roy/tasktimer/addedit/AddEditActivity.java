@@ -8,14 +8,20 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.example.roy.tasktimer.R;
+import com.example.roy.tasktimer.data.DataModule;
 import com.example.roy.tasktimer.dialog.AppDialog;
 import com.example.roy.tasktimer.listeners.DialogEventListener;
 import com.example.roy.tasktimer.listeners.onSaveListener;
+
+import javax.inject.Inject;
 
 public class AddEditActivity extends AppCompatActivity implements onSaveListener,
         DialogEventListener {
     public static final int DIALOG_ID_CANCEL_EDIT = 1;
     private static final String TAG = "AddEditActivity";
+
+    @Inject
+    AddEditPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +41,14 @@ public class AddEditActivity extends AppCompatActivity implements onSaveListener
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
 
+        DaggerAddEditComponent.builder()
+                .dataModule(new DataModule(getApplicationContext()))
+                .addEditModule(new AddEditModule(fragment))
+                .build().inject(this);
+
         ft.replace(R.id.content_add_edit, fragment);
         ft.commit();
+
     }
 
     @Override

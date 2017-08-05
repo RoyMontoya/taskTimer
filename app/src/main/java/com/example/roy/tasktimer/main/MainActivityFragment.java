@@ -26,13 +26,18 @@ import butterknife.ButterKnife;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MainActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>,
+        MainContract.View {
 
     public static final int LOADER_ID = 0;
     private static final String TAG = "MainActivityFragment";
+
     @BindView(R.id.task_list)
     RecyclerView recyclerView;
-    private CursorRecyclerViewAdapter adapater;
+
+    private CursorRecyclerViewAdapter adapter;
+
+    private MainContract.Presenter presenter;
 
     public MainActivityFragment() {
     }
@@ -41,16 +46,16 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
-        ButterKnife.bind(this, view);
-        setupRecyclerView();
+        initFragment(view);
         return view;
     }
 
-    private void setupRecyclerView() {
+    @Override
+    public void setupRecyclerView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapater = new CursorRecyclerViewAdapter(null,
+        adapter = new CursorRecyclerViewAdapter(null,
                 (OnTaskClickListener) getActivity());
-        recyclerView.setAdapter(adapater);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -76,14 +81,24 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        adapater.swapCursor(data);
-        int count = adapater.getItemCount();
+        adapter.swapCursor(data);
+        int count = adapter.getItemCount();
 
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        adapater.swapCursor(null);
+        adapter.swapCursor(null);
     }
 
+    @Override
+    public void setPresenter(MainContract.Presenter mainPresenter) {
+        presenter = mainPresenter;
+    }
+
+    @Override
+    public void initFragment(View view) {
+        ButterKnife.bind(this, view);
+        setupRecyclerView();
+    }
 }

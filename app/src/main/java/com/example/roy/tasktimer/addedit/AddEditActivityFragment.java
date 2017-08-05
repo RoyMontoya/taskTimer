@@ -11,13 +11,9 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.roy.tasktimer.R;
-import com.example.roy.tasktimer.data.AppDataManager;
-import com.example.roy.tasktimer.data.DataModule;
 import com.example.roy.tasktimer.listeners.onSaveListener;
 import com.example.roy.tasktimer.model.Task;
 import com.jakewharton.rxbinding.view.RxView;
-
-import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,11 +32,7 @@ public class AddEditActivityFragment extends Fragment implements AddEditContract
     @BindView(R.id.addedit_save)
     Button saveButton;
 
-    @Inject
-    AppDataManager dataManager;
-
     AddEditContract.Presenter presenter;
-
 
     private int mode;
     private onSaveListener saveListener;
@@ -97,12 +89,7 @@ public class AddEditActivityFragment extends Fragment implements AddEditContract
     public void initFragment(View view) {
         ButterKnife.bind(this, view);
 
-        DaggerAddEditComponent.builder()
-                .dataModule(new DataModule(getActivity().getApplicationContext()))
-                .addEditModule(new AddEditModule(this))
-                .build().inject(this);
 
-        new AddEditPresenter(dataManager, this);
     }
 
     @Override

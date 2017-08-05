@@ -5,7 +5,8 @@ import android.content.Context;
 
 import com.example.roy.tasktimer.AppModule;
 import com.example.roy.tasktimer.data.db.AppDatabase;
-import com.example.roy.tasktimer.util.DataScope;
+
+import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
@@ -18,26 +19,26 @@ public class DataModule {
 
     Context context;
 
-    public DataModule(Context context){
+    public DataModule(Context context) {
         this.context = context;
     }
 
     @Provides
-    @DataScope
+    @Singleton
     AppDatabase providesAppDatabase() {
         return AppDatabase.getIntance(context);
     }
 
     @Provides
-    @DataScope
+    @Singleton
     ContentResolver providesContentResolver() {
         return context.getContentResolver();
     }
 
     @Provides
-    @DataScope
-    AppDataManager providesAppDataManager(ContentResolver contentResolver){
-        return  new AppDataManager(contentResolver);
+    @Singleton
+    DataManager providesAppDataManager(ContentResolver contentResolver) {
+        return new AppDataManager(contentResolver);
     }
 
 }
