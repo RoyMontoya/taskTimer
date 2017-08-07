@@ -31,6 +31,9 @@ import com.jakewharton.rxbinding.view.RxView;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MainActivity extends AppCompatActivity implements OnTaskClickListener,
         onSaveListener,
         DialogEventListener {
@@ -39,19 +42,32 @@ public class MainActivity extends AppCompatActivity implements OnTaskClickListen
     public static final int DIALOG_ID_CANCEL_EDIT = 2;
     private static final String TAG = "MainActivity";
     private static final String TASK_ID = "TaskId";
-    @Inject
-    MainPresenter presenter;
+    private static final String VERSION_CODE = "v" + BuildConfig.VERSION_NAME;
+
     private boolean twoPane = false;
     private AlertDialog dialog = null;
+
+    @Inject
+    MainPresenter presenter;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initActivityComponents();
+    }
+
+    private void initActivityComponents() {
         initDagger();
+        initButterKnife();
         initToolbar();
         checkTwoPaneConfig();
+    }
 
+    private void initButterKnife() {
+        ButterKnife.bind(this);
     }
 
     private void initDagger() {
@@ -69,25 +85,18 @@ public class MainActivity extends AppCompatActivity implements OnTaskClickListen
     }
 
     private void initToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         switch (id) {
             case R.id.menumain_addTask:
                 taskEditRequest(null);
@@ -110,21 +119,23 @@ public class MainActivity extends AppCompatActivity implements OnTaskClickListen
 
     @SuppressLint("SetTextI18n")
     private void showAboutDialog() {
-        @SuppressLint("InflateParams") View messageView = getLayoutInflater().inflate(R.layout.about, null, false);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.app_name);
-        builder.setIcon(R.mipmap.ic_clock);
-        builder.setView(messageView);
-        builder.setPositiveButton(R.string.ok, (dialogInterface, i) -> {
-            if (dialog != null && dialog.isShowing()) dialog.dismiss();
-        });
-
-        dialog = builder.create();
+        @SuppressLint("InflateParams")
+        View messageView = getLayoutInflater().inflate(R.layout.about, null, false);
+        dialog = buildAboutDialog(messageView);
+        configureAboutVersion(messageView);
+        configureSupportWebLink(messageView);
         dialog.setCanceledOnTouchOutside(true);
 
-        TextView textView = (TextView) messageView.findViewById(R.id.about_version);
-        textView.setText("v" + BuildConfig.VERSION_NAME);
 
+        dialog.show();
+    }
+
+    private void configureAboutVersion(View messageView) {
+        TextView textView = messageView.findViewById(R.id.about_version);
+        textView.setText(VERSION_CODE);
+    }
+
+    private void configureSupportWebLink(View messageView) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             final TextView weblink = messageView.findViewById(R.id.about_clickable_link);
             RxView.clicks(weblink).subscribe(aVoid -> {
@@ -133,10 +144,19 @@ public class MainActivity extends AppCompatActivity implements OnTaskClickListen
                 i.setData(Uri.parse(url));
                 startActivity(i);
             });
-
         }
+    }
 
-        dialog.show();
+    public AlertDialog buildAboutDialog(View messageView) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.app_name);
+        builder.setIcon(R.mipmap.ic_clock);
+        builder.setView(messageView);
+        builder.setPositiveButton(R.string.ok, (dialogInterface, i) -> {
+            if (dialog != null && dialog.isShowing()) dialog.dismiss();
+        });
+
+        return builder.create();
     }
 
     public void taskEditRequest(Task task) {
@@ -195,6 +215,7 @@ public class MainActivity extends AppCompatActivity implements OnTaskClickListen
                 if (BuildConfig.DEBUG && taskId == 0) {
                     throw new AssertionError("TaskId is equal to zero!");
                 }
+                //// TODO: 8/7/17 convert to MVP
                 getContentResolver().delete(TaskContract.buildTaskUri(taskId), null, null);
                 break;
             case DIALOG_ID_CANCEL_EDIT:
@@ -233,17 +254,21 @@ public class MainActivity extends AppCompatActivity implements OnTaskClickListen
         if (fragment == null || fragment.canClose()) {
             super.onBackPressed();
         } else {
-            AppDialog dialog = new AppDialog();
-            Bundle args = new Bundle();
-            args.putInt(AppDialog.DIALOG_ID, DIALOG_ID_CANCEL_EDIT);
-            args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.cancelEditDialog_message));
-            args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.cancelEditDialog_positive_caption);
-            args.putInt(AppDialog.DIALOG_NEGATIVE_RID, R.string.cancelEditDialog_negative_caption);
-
-            dialog.setArguments(args);
-            dialog.show(getSupportFragmentManager(), null);
+            showUnSavedChangesDialog();
 
         }
 
+    }
+
+    private void showUnSavedChangesDialog() {
+        AppDialog dialog = new AppDialog();
+        Bundle args = new Bundle();
+        args.putInt(AppDialog.DIALOG_ID, DIALOG_ID_CANCEL_EDIT);
+        args.putString(AppDialog.DIALOG_MESSAGE, getString(R.string.cancelEditDialog_message));
+        args.putInt(AppDialog.DIALOG_POSITIVE_RID, R.string.cancelEditDialog_positive_caption);
+        args.putInt(AppDialog.DIALOG_NEGATIVE_RID, R.string.cancelEditDialog_negative_caption);
+
+        dialog.setArguments(args);
+        dialog.show(getSupportFragmentManager(), null);
     }
 }
