@@ -21,6 +21,7 @@ import com.example.roy.tasktimer.BuildConfig;
 import com.example.roy.tasktimer.R;
 import com.example.roy.tasktimer.addedit.AddEditActivity;
 import com.example.roy.tasktimer.addedit.AddEditActivityFragment;
+import com.example.roy.tasktimer.data.DataModule;
 import com.example.roy.tasktimer.data.db.TaskContract;
 import com.example.roy.tasktimer.dialog.AppDialog;
 import com.example.roy.tasktimer.listeners.DialogEventListener;
@@ -76,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements OnTaskClickListen
         if (fragment != null) {
             DaggerMainComponent.builder()
                     .mainModule(new MainModule(fragment))
+                    .dataModule(new DataModule(getApplicationContext()))
                     .build().inject(this);
         }
     }
@@ -216,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements OnTaskClickListen
                     throw new AssertionError("TaskId is equal to zero!");
                 }
                 //// TODO: 8/7/17 convert to MVP
-                getContentResolver().delete(TaskContract.buildTaskUri(taskId), null, null);
+                presenter.deleteTask(TaskContract.buildTaskUri(taskId));
                 break;
             case DIALOG_ID_CANCEL_EDIT:
 

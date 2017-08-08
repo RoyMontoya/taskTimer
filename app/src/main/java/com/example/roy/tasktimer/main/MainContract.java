@@ -1,5 +1,8 @@
 package com.example.roy.tasktimer.main;
 
+import android.net.Uri;
+import android.support.annotation.NonNull;
+
 import com.example.roy.tasktimer.base.BaseView;
 
 /**
@@ -15,6 +18,8 @@ public class MainContract {
     }
 
     interface Presenter {
+
+        void deleteTask(@NonNull Uri uri);
 
     }
 }

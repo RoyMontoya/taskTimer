@@ -11,8 +11,9 @@ import android.support.annotation.Nullable;
 
 public interface DataManager {
 
-    void updateTaskInDataBase(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String where, @Nullable String[] selectionArgs);
+    void updateTaskInDataBase(@NonNull Uri uri, @Nullable ContentValues contentValues);
 
-    void insertIntoDatabase(@NonNull Uri uri, @Nullable ContentValues contentValues);
+    void insertTaskIntoDatabase(@NonNull Uri uri, @Nullable ContentValues contentValues);
 
+    void deleteTaskFromDatabase(@NonNull Uri uri);
 }

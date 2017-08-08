@@ -1,14 +1,16 @@
 package com.example.roy.tasktimer.main;
 
-import com.example.roy.tasktimer.util.PerActivity;
+import com.example.roy.tasktimer.data.DataModule;
+
+import javax.inject.Singleton;
 
 import dagger.Component;
 
 /**
  * Created by Roy on 8/4/17.
  */
-@PerActivity
-@Component(modules = MainModule.class)
+@Singleton
+@Component(modules = {MainModule.class, DataModule.class})
 public interface MainComponent {
 
     void inject(MainActivity activity);

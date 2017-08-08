@@ -18,7 +18,6 @@ import javax.inject.Inject;
 public class AddEditActivity extends AppCompatActivity implements onSaveListener,
         DialogEventListener {
     public static final int DIALOG_ID_CANCEL_EDIT = 1;
-    private static final String TAG = "AddEditActivity";
 
     @Inject
     AddEditPresenter presenter;

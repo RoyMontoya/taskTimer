@@ -23,8 +23,8 @@ public class AddEditPresenter implements AddEditContract.Presenter {
 
 
     @Inject
-    AddEditPresenter(DataManager data, AddEditContract.View fragment) {
-        this.dataManager = data;
+    AddEditPresenter(DataManager dataManager, AddEditContract.View fragment) {
+        this.dataManager = dataManager;
         this.view = fragment;
     }
 
@@ -59,7 +59,7 @@ public class AddEditPresenter implements AddEditContract.Presenter {
                 if (sortOder != 0)
                     contentValues.put(TaskContract.Columns.TASK_SORTORDER, sortOder);
                 if (contentValues.size() != 0) {
-                    dataManager.updateTaskInDataBase(TaskContract.buildTaskUri(currentTask.getId()), contentValues, null, null);
+                    dataManager.updateTaskInDataBase(TaskContract.buildTaskUri(currentTask.getId()), contentValues);
                 }
                 break;
             case ADD:
@@ -67,7 +67,7 @@ public class AddEditPresenter implements AddEditContract.Presenter {
                     contentValues.put(TaskContract.Columns.TASK_NAME, name);
                     contentValues.put(TaskContract.Columns.TASK_DESCRIPTION, description);
                     contentValues.put(TaskContract.Columns.TASK_SORTORDER, sortOder);
-                    dataManager.insertIntoDatabase(TaskContract.CONTENT_URI, contentValues);
+                    dataManager.insertTaskIntoDatabase(TaskContract.CONTENT_URI, contentValues);
                 }
                 break;
         }

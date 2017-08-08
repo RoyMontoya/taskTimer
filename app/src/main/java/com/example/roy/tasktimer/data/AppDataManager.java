@@ -12,20 +12,25 @@ import android.support.annotation.Nullable;
 
 public class AppDataManager implements DataManager {
 
-    private final ContentResolver appProvider;
+    private final ContentResolver AppContentResolver;
 
     AppDataManager(ContentResolver contentResolver) {
-        this.appProvider = contentResolver;
+        this.AppContentResolver = contentResolver;
     }
 
 
     @Override
-    public void updateTaskInDataBase(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String where, @Nullable String[] selectionArgs) {
-        appProvider.update(uri, contentValues, where, selectionArgs);
+    public void updateTaskInDataBase(@NonNull Uri uri, @Nullable ContentValues contentValues) {
+        AppContentResolver.update(uri, contentValues, null, null);
     }
 
     @Override
-    public void insertIntoDatabase(@NonNull Uri uri, @Nullable ContentValues contentValues) {
-        appProvider.insert(uri, contentValues);
+    public void insertTaskIntoDatabase(@NonNull Uri uri, @Nullable ContentValues contentValues) {
+        AppContentResolver.insert(uri, contentValues);
+    }
+
+    @Override
+    public void deleteTaskFromDatabase(@NonNull Uri uri) {
+        AppContentResolver.delete(uri, null, null);
     }
 }
