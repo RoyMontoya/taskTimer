@@ -18,11 +18,12 @@ public class AddEditContract {
         void configureSaveButton();
 
         Task getTaskArgument();
+
+        boolean canClose();
+
     }
 
     interface Presenter {
-
-        boolean canClose();
 
         void setCurrentTask(@Nullable Task task);
 

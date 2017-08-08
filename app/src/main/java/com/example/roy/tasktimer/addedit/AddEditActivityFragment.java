@@ -88,8 +88,6 @@ public class AddEditActivityFragment extends Fragment implements AddEditContract
     @Override
     public void initFragment(View view) {
         ButterKnife.bind(this, view);
-
-
     }
 
     @Override
@@ -112,11 +110,11 @@ public class AddEditActivityFragment extends Fragment implements AddEditContract
             sortOrderTextView.setText(String.valueOf(task.getSortOrder()));
             mode = AddEditPresenter.EDIT;
         }
-
         presenter.setCurrentTask(task);
         configureSaveButton();
     }
 
+    //Incomplete method this will check conditions to close the fragment later
     public boolean canClose() {
         return false;
     }

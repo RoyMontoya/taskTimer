@@ -1,6 +1,7 @@
 package com.example.roy.tasktimer.addedit;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -15,23 +16,42 @@ import com.example.roy.tasktimer.listeners.onSaveListener;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class AddEditActivity extends AppCompatActivity implements onSaveListener,
         DialogEventListener {
+
     public static final int DIALOG_ID_CANCEL_EDIT = 1;
 
     @Inject
     AddEditPresenter presenter;
 
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_edit);
+        initButterKnife();
+        initToolbar();
+        initDagger(getConfiguredFragment());
+    }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+    private void initButterKnife() {
+        ButterKnife.bind(this);
+    }
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    private void initDagger(AddEditActivityFragment fragment) {
+        DaggerAddEditComponent.builder()
+                .dataModule(new DataModule(getApplicationContext()))
+                .addEditModule(new AddEditModule(fragment))
+                .build().inject(this);
+    }
 
+    @NonNull
+    private AddEditActivityFragment getConfiguredFragment() {
         AddEditActivityFragment fragment = new AddEditActivityFragment();
         if (getIntent().getExtras() != null) {
             Bundle args = getIntent().getExtras();
@@ -39,15 +59,15 @@ public class AddEditActivity extends AppCompatActivity implements onSaveListener
         }
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-
-        DaggerAddEditComponent.builder()
-                .dataModule(new DataModule(getApplicationContext()))
-                .addEditModule(new AddEditModule(fragment))
-                .build().inject(this);
-
         ft.replace(R.id.content_add_edit, fragment);
         ft.commit();
 
+        return fragment;
+    }
+
+    private void initToolbar() {
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -84,7 +104,7 @@ public class AddEditActivity extends AppCompatActivity implements onSaveListener
                 return super.onOptionsItemSelected(item);
         }
     }
-
+    //Pending decision to change this method
     private void showConfirmationDialog() {
         AppDialog dialog = new AppDialog();
         Bundle args = new Bundle();
@@ -99,7 +119,6 @@ public class AddEditActivity extends AppCompatActivity implements onSaveListener
 
     @Override
     public void onPositiveDialogResult(int dialogId, Bundle args) {
-
     }
 
     @Override
@@ -109,7 +128,6 @@ public class AddEditActivity extends AppCompatActivity implements onSaveListener
 
     @Override
     public void onDialogCancelled(int dialogId) {
-
     }
 
 }

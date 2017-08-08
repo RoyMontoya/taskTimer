@@ -21,7 +21,6 @@ public class AddEditPresenter implements AddEditContract.Presenter {
     private final AddEditContract.View view;
     private Task currentTask;
 
-
     @Inject
     AddEditPresenter(DataManager dataManager, AddEditContract.View fragment) {
         this.dataManager = dataManager;
@@ -31,11 +30,6 @@ public class AddEditPresenter implements AddEditContract.Presenter {
     @Inject
     void setupPresenterInView() {
         view.setPresenter(this);
-    }
-
-    @Override
-    public boolean canClose() {
-        return false;
     }
 
     @Override

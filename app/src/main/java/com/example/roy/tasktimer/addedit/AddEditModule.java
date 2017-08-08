@@ -7,11 +7,11 @@ import dagger.Provides;
  * Created by Roy on 8/3/17.
  */
 @Module
-public class AddEditModule {
+class AddEditModule {
 
     private final AddEditContract.View view;
 
-    public AddEditModule(AddEditContract.View fragment) {
+    AddEditModule(AddEditContract.View fragment) {
         view = fragment;
     }
 
