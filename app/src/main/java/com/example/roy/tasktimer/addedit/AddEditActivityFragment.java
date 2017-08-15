@@ -46,7 +46,6 @@ public class AddEditActivityFragment extends Fragment implements AddEditContract
         View view = inflater.inflate(R.layout.fragment_add_edit, container, false);
         initFragment(view);
         initializeViews();
-
         return view;
     }
 

@@ -7,16 +7,17 @@ import dagger.Provides;
  * Created by Roy on 8/4/17.
  */
 @Module
-public class MainModule {
+class MainModule {
 
     private final MainContract.View view;
 
-    public MainModule(MainContract.View fragment) {
+    MainModule(MainContract.View fragment) {
         this.view = fragment;
     }
 
     @Provides
     MainContract.View providesMainView() {
         return view;
+
     }
 }
